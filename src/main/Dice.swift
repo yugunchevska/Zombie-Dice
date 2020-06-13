@@ -27,4 +27,8 @@ final class Dice {
         shotgunFaces = 3
     } 
   }
+
+  func getType() -> String {
+    return String(describing: type)
+  }
 }
