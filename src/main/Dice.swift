@@ -12,6 +12,14 @@ enum DiceFace {
   func toString() -> String {
     return String(describing: self)
   }
+
+  func getPoint() -> Int {
+    switch self {
+      case .brain: return 1
+      case .steps: return 0
+      case .shotgun: return 0
+    }
+  }
 }
 
 final class Dice {
