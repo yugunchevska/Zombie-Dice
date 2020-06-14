@@ -18,6 +18,7 @@ final class Zombie {
   }
 
   func updatePoints(points: Int) {
+    print("Zombie " + name + " won " + String(points) + " brains in this round.")
     self.points += points
   }
 }

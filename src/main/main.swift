@@ -1,149 +1,110 @@
-let zombieOne = Zombie(name: "Yuliana")
-let zombieTwo = Zombie(name: "Valentin")
+func selectPlayers() -> [Zombie] {
+  print()
 
-var zombies: [Zombie] = [zombieOne, zombieTwo]
+  let playersCount = waitForAnswer(question: "Welcome to Zombie Dice (Swift edition). How many players wants to play?", expectedAnswers: ["2", "3", "4", "5", "6", "7", "8"])
 
-for zombie in zombies {
-  // repeat
-  let chosenDices: [Dice] = zombie.chooseThreeDices()
-  let rolledDices: [Dice] = zombie.rollDices(chosenDices: chosenDices)
-  
-  var deadPoints = zombie.getShotguns(diceFaces: rolledDices)
-  if deadPoints >= 3 {
-    print("Zombie " + zombie.getName() + " is dead for this round.")
-    continue
+  let zombieCount = Int(playersCount) ?? 2
+
+  print("Choose names for your players.")
+  var zombies: [Zombie] = []
+  for i in 1...zombieCount {
+    print("Zombie name for player " + String(i) + ": ")
+
+    if let name = readLine() {
+      zombies.append(Zombie(name: name))
+    } else {
+      print("Player's name will be Anonymous")
+      zombies.append(Zombie(name: "Anonymous"))
+    }
   }
 
-  var points = zombie.getBrains(diceFaces: rolledDices)
-
-  if zombie.getPoints() >= 13 {
-    print("Zombie " + zombie.getName() + " has won!")
-    break
-  }
-
-  // ask to continue the game?
-
-  let steps: [Dice] = zombie.getSteps(diceFaces: rolledDices)
-  if steps.count != 0 {
-    // ask for returning the dices with steps? 
-    zombie.addDices(dices: steps)
-  }
-
-  if !zombie.hasDices() {
-    print("Zombie " + zombie.getName() + " doesn't have enough dice")
-    zombie.updatePoints(points: points)
-    continue
-  }
-
-
-
-  // till here
-
-  
-  
-  
-  // repeat
-  let chosenDicesTwo: [Dice] = zombie.chooseThreeDices()
-  let rolledDicesTwo: [Dice] = zombie.rollDices(chosenDices: chosenDicesTwo)
-  
-  deadPoints += zombie.getShotguns(diceFaces: rolledDicesTwo)
-  if deadPoints >= 3 {
-    print("Zombie " + zombie.getName() + " is dead for this round.")
-    continue
-  }
-
-  points += zombie.getBrains(diceFaces: rolledDicesTwo)
-
-  if !zombie.hasDices() {
-    print("Zombie " + zombie.getName() + " doesn't have enough dice")
-    zombie.updatePoints(points: points)
-    continue
-  }
-
-  // ask to continue the game?
-
-  let stepsTwo: [Dice] = zombie.getSteps(diceFaces: rolledDices)
-  if stepsTwo.count != 0 {
-    // ask for returning the dices with steps? 
-    zombie.addDices(dices: stepsTwo)
-  }
-
-  // till here
-
-  // add this at the end
-  zombie.updatePoints(points: points)
-}let zombieOne = Zombie(name: "Yuliana")
-let zombieTwo = Zombie(name: "Valentin")
-
-var zombies: [Zombie] = [zombieOne, zombieTwo]
-
-for zombie in zombies {
-  // repeat
-  let chosenDices: [Dice] = zombie.chooseThreeDices()
-  let rolledDices: [Dice] = zombie.rollDices(chosenDices: chosenDices)
-  
-  var deadPoints = zombie.getShotguns(diceFaces: rolledDices)
-  if deadPoints >= 3 {
-    print("Zombie " + zombie.getName() + " is dead for this round.")
-    continue
-  }
-
-  var points = zombie.getBrains(diceFaces: rolledDices)
-
-  if zombie.getPoints() >= 13 {
-    print("Zombie " + zombie.getName() + " has won!")
-    break
-  }
-
-  // ask to continue the game?
-
-  let steps: [Dice] = zombie.getSteps(diceFaces: rolledDices)
-  if steps.count != 0 {
-    // ask for returning the dices with steps? 
-    zombie.addDices(dices: steps)
-  }
-
-  if !zombie.hasDices() {
-    print("Zombie " + zombie.getName() + " doesn't have enough dice")
-    zombie.updatePoints(points: points)
-    continue
-  }
-
-
-
-  // till here
-
-  
-  
-  
-  // repeat
-  let chosenDicesTwo: [Dice] = zombie.chooseThreeDices()
-  let rolledDicesTwo: [Dice] = zombie.rollDices(chosenDices: chosenDicesTwo)
-  
-  deadPoints += zombie.getShotguns(diceFaces: rolledDicesTwo)
-  if deadPoints >= 3 {
-    print("Zombie " + zombie.getName() + " is dead for this round.")
-    continue
-  }
-
-  points += zombie.getBrains(diceFaces: rolledDicesTwo)
-
-  if !zombie.hasDices() {
-    print("Zombie " + zombie.getName() + " doesn't have enough dice")
-    zombie.updatePoints(points: points)
-    continue
-  }
-
-  // ask to continue the game?
-
-  let stepsTwo: [Dice] = zombie.getSteps(diceFaces: rolledDices)
-  if stepsTwo.count != 0 {
-    // ask for returning the dices with steps? 
-    zombie.addDices(dices: stepsTwo)
-  }
-
-  // till here
-
-  // add this at the end
-  zombie.updatePoints(points: points)
+  return zombies
 }
+
+func startGame() {
+  let zombies = selectPlayers()
+  if zombies.isEmpty {
+    return
+  }
+
+  for zombie in zombies {
+    print("===")
+    // table with points 
+    print("Current turn: " + zombie.getName())
+
+    var points = 0
+    var deadPoints = 0
+    repeat {
+      print("===")
+      let chosenDices: [Dice] = zombie.chooseThreeDices()
+      let rolledDices: [Dice] = zombie.rollDices(chosenDices: chosenDices)
+      print("===")
+      
+      deadPoints += zombie.getShotguns(diceFaces: rolledDices)
+      if deadPoints >= 3 {
+        print("Zombie " + zombie.getName() + " is dead for this round.")
+        break
+      }
+
+      points += zombie.getBrains(diceFaces: rolledDices)
+
+      if zombie.getPoints() + points >= 13 {
+        print("Zombie " + zombie.getName() + " has won!")
+        // stop the whole game, not just this loop
+        break
+      }
+
+      let wantToContinue = waitForAnswer(question: "Do you want to continue?", expectedAnswers: ["Y", "N"])
+      if wantToContinue == "N" {
+        zombie.updatePoints(points: points)
+        break
+      }
+
+      let steps: [Dice] = zombie.getSteps(diceFaces: rolledDices)
+      if !steps.isEmpty {
+
+        for dice in steps {
+          let diceForReturning = waitForAnswer(question: "Do you want to return the " + dice.getType() + " dice?", expectedAnswers: ["Y", "N"])
+          if diceForReturning == "Y" {
+            zombie.addDices(dices: [dice])
+          }
+        }
+        
+      }
+
+      if !zombie.hasDices() {
+        print("Zombie " + zombie.getName() + " doesn't have enough dice")
+        zombie.updatePoints(points: points)
+        break
+      }
+
+    } while (true)
+  }
+}
+
+func waitForAnswer(question: String, expectedAnswers: [String]) -> String {
+  var expAnswers: String = "["
+  for i in 0...expectedAnswers.count - 1 {
+    if i == expectedAnswers.count - 1{
+      expAnswers += expectedAnswers[i] + "]"
+    } else {
+      expAnswers += expectedAnswers[i] + "/"
+    }
+  }
+  print(question + expAnswers)
+
+  while (true) {
+    if let answerFromClient = readLine() {
+      for expectedAnswer in expectedAnswers {
+        if answerFromClient.uppercased() == expectedAnswer.uppercased() {
+          return expectedAnswer
+        }
+      }
+      print("Please answer the question")
+    } else {
+      print("Please answer the question")
+    }
+  }
+}
+
+startGame()
