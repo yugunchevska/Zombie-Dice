@@ -4,6 +4,16 @@ enum DiceType {
   case red
 }
 
+enum DiceFace {
+  case brain
+  case steps
+  case shotgun 
+
+  func toString() -> String {
+    return String(describing: self)
+  }
+}
+
 final class Dice {
   private var type: DiceType
   private var brainFaces: Int
@@ -30,5 +40,46 @@ final class Dice {
 
   func getType() -> String {
     return String(describing: type)
+  }
+
+  func roll() -> DiceFace {
+    let faceIndex = Int.random(in: 1...6)
+    switch type {
+      case .green:
+        switch faceIndex {
+          case 1...3: 
+            return .brain
+          case 4,5:
+            return .steps
+          case 6:
+            return .shotgun
+          default:
+            return .brain
+        }
+
+      case .yellow:
+        switch faceIndex {
+          case 1,2: 
+            return .brain
+          case 3,4:
+            return .steps
+          case 5,6:
+            return .shotgun
+          default:
+            return .steps
+        }
+      case .red: 
+        switch faceIndex {
+          case 1: 
+            return .brain
+          case 2,3:
+            return .steps
+          case 4...6:
+            return .shotgun
+          default:
+            return .shotgun
+        }
+    }
+
   }
 }
