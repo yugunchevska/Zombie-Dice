@@ -42,6 +42,10 @@ extension Zombie {
     return gameManager.getDicesCount() > 2
   }
 
+  func addDices(dices: [Dice]) {
+    gameManager.addDices(add: dices)
+  }
+
   func getBrains(diceFaces: [Dice]) -> Int {
     var counter: Int = 0
     for diceFace in diceFaces {
@@ -58,5 +62,15 @@ extension Zombie {
       }
     }
     return counter
+  }
+
+  func getSteps(diceFaces: [Dice]) -> [Dice] {
+    var stepsDice: [Dice] = []
+    for dice in diceFaces {
+      if dice.getRolledFace() == .steps {
+        stepsDice.append(dice)
+      }
+    }
+    return stepsDice
   }
 }

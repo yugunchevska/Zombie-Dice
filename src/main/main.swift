@@ -18,11 +18,11 @@ for zombie in zombies {
 
   // ask to continue the game?
 
-  // var steps: [Dice] = zombie.getSteps(diceFaces: rolledDices)
-  // if steps.count != 0 {
-  //   // ask for returning the dices with steps? 
-  //   zombie.addDices(add: steps)
-  // }
+  let steps: [Dice] = zombie.getSteps(diceFaces: rolledDices)
+  if steps.count != 0 {
+    // ask for returning the dices with steps? 
+    zombie.addDices(dices: steps)
+  }
 
   if !zombie.hasDices() {
     print("Zombie " + zombie.getName() + " doesn't have enough dice")
@@ -57,11 +57,11 @@ for zombie in zombies {
 
   // ask to continue the game?
 
-  // var steps: [Dice] = zombie.getSteps(diceFaces: rolledDicesTwo)
-  // if steps.count != 0 {
-  //   // ask for returning the dices with steps? 
-  //   zombie.addDices(add: steps)
-  // }
+  let stepsTwo: [Dice] = zombie.getSteps(diceFaces: rolledDices)
+  if stepsTwo.count != 0 {
+    // ask for returning the dices with steps? 
+    zombie.addDices(dices: stepsTwo)
+  }
 
   // till here
 

@@ -66,4 +66,8 @@ extension GameManager {
       removeDice(remove: dice)
     }
   }
+
+  func addDices(add: [Dice]) {
+    dices.append(contentsOf: add)
+  }
 }
