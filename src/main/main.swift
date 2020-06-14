@@ -1,6 +1,4 @@
 func selectPlayers() -> [Zombie] {
-  print()
-
   let playersCount = waitForAnswer(question: "Welcome to Zombie Dice (Swift edition). How many players wants to play?", expectedAnswers: ["2", "3", "4", "5", "6", "7", "8"])
 
   let zombieCount = Int(playersCount) ?? 2
@@ -27,7 +25,18 @@ func startGame() {
     return
   }
 
-  for zombie in zombies {
+  while true {
+    let hasWon = play(zombies: zombies)
+    if hasWon {
+      break
+    }
+  }
+}
+
+func play(zombies: [Zombie]) -> Bool {
+  for zombie in zombies { 
+    zombie.restoreAllDice()
+    
     print("===")
     // table with points 
     print("Current turn: " + zombie.getName())
@@ -50,8 +59,7 @@ func startGame() {
 
       if zombie.getPoints() + points >= 13 {
         print("Zombie " + zombie.getName() + " has won!")
-        // stop the whole game, not just this loop
-        break
+        return true
       }
 
       let wantToContinue = waitForAnswer(question: "Do you want to continue?", expectedAnswers: ["Y", "N"])
@@ -80,6 +88,7 @@ func startGame() {
 
     } while (true)
   }
+  return false
 }
 
 func waitForAnswer(question: String, expectedAnswers: [String]) -> String {

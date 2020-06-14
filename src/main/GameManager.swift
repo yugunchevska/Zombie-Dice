@@ -70,4 +70,17 @@ extension GameManager {
   func addDices(add: [Dice]) {
     dices.append(contentsOf: add)
   }
+
+  func restoreAllDice() {
+    dices = []
+    for _ in 0...5 {
+      dices.append(Dice(type: DiceType.green))
+    }
+    for _ in 0...3 {
+      dices.append(Dice(type: DiceType.yellow))
+    }
+    for _ in 0...2 {
+      dices.append(Dice(type: DiceType.red))
+    }
+  }
 }

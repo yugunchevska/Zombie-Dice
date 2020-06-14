@@ -50,6 +50,10 @@ extension Zombie {
   func addDices(dices: [Dice]) {
     gameManager.addDices(add: dices)
   }
+
+  func restoreAllDice() {
+    gameManager.restoreAllDice()
+  }
 }
 
 extension Zombie {
