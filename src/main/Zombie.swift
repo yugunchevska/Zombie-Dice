@@ -13,6 +13,10 @@ final class Zombie {
     return name
   }
 
+  func getPoints() -> Int {
+    return points
+  }
+
   func updatePoints(points: Int) {
     self.points += points
   }
@@ -45,7 +49,9 @@ extension Zombie {
   func addDices(dices: [Dice]) {
     gameManager.addDices(add: dices)
   }
+}
 
+extension Zombie {
   func getBrains(diceFaces: [Dice]) -> Int {
     var counter: Int = 0
     for diceFace in diceFaces {
