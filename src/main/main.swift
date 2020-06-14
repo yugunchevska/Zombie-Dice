@@ -36,9 +36,9 @@ func startGame() {
 func play(zombies: [Zombie]) -> Bool {
   for zombie in zombies { 
     zombie.restoreAllDice()
-    
+
     print("===")
-    // table with points 
+    printTableWithPoints(zombies: zombies) 
     print("Current turn: " + zombie.getName())
 
     var points = 0
@@ -113,6 +113,44 @@ func waitForAnswer(question: String, expectedAnswers: [String]) -> String {
     } else {
       print("Please answer the question")
     }
+  }
+}
+
+func printTableWithPoints(zombies: [Zombie]) {
+  var longestNameCount = 4
+  for zombie in zombies {
+    if zombie.getName().count > longestNameCount {
+      longestNameCount = zombie.getName().count
+    }
+  }
+
+  var horizontalLines = " "
+  for _ in 0...longestNameCount + 4 + 6 {
+    horizontalLines += "-"
+  }
+  print(horizontalLines)
+
+  var header = "| Name"
+  for _ in 0...longestNameCount - 4 {
+    header += " "
+  }
+  header += "| Points |"
+  print(header)
+  print(horizontalLines)
+
+  for zombie in zombies {
+    var zombieRow = "| " + zombie.getName()
+    for _ in 0...longestNameCount - zombie.getName().count {
+      zombieRow += " "
+    }
+    if String(zombie.getPoints()).count == 1 {
+      zombieRow += "| " + String(zombie.getPoints()) + "      |"
+    } else {
+      zombieRow += "| " + String(zombie.getPoints()) + "     |"
+    }
+    
+    print(zombieRow)
+    print(horizontalLines)
   }
 }
 
