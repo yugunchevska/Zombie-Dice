@@ -13,7 +13,7 @@ final class GameManager {
     }
   }
 
-  func chooseThreeDices() -> [Dice] {
+  func chooseThreeDices(zombie: Zombie) -> [Dice] {
     var chosenDices: [Dice] = []
     var chosenIndexes: [Int] = []
 
@@ -31,6 +31,8 @@ final class GameManager {
     dice = dices[index]
     chosenDices.append(dice)
     chosenIndexes.append(index)
+
+    print(zombie.getName() + " chose dice of types " + chosenDices[0].getType() + " " + chosenDices[1].getType() + " " + chosenDices[2].getType())
 
     return chosenDices
   }
