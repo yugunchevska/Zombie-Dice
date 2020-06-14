@@ -28,12 +28,12 @@ extension Zombie {
     return chosenDices
   }
 
-  func rollDices(chosenDices: [Dice]) -> [DiceFace] {
-    var rolledDice: [DiceFace] = []
+  func rollDices(chosenDices: [Dice]) -> [Dice] {
+    var rolledDice: [Dice] = []
     for dice in chosenDices {
       rolledDice.append(dice.roll())
     }
-    print("After rolling " + name + " has " + rolledDice[0].toString() + " " + rolledDice[1].toString() + " " + rolledDice[2].toString())
+    print("After rolling " + name + " has " + rolledDice[0].getRolledFace().toString() + " " + rolledDice[1].getRolledFace().toString() + " " + rolledDice[2].getRolledFace().toString())
 
     return rolledDice
   }
@@ -42,18 +42,18 @@ extension Zombie {
     return gameManager.getDicesCount() > 2
   }
 
-  func getBrains(diceFaces: [DiceFace]) -> Int {
+  func getBrains(diceFaces: [Dice]) -> Int {
     var counter: Int = 0
     for diceFace in diceFaces {
-      counter += diceFace.getPoint()
+      counter += diceFace.getRolledFace().getPoint()
     }
     return counter
   }
 
-  func getShotguns(diceFaces: [DiceFace]) -> Int {
+  func getShotguns(diceFaces: [Dice]) -> Int {
     var counter: Int = 0
     for diceFace in diceFaces {
-      if diceFace == .shotgun {
+      if diceFace.getRolledFace() == .shotgun {
         counter += 1
       }
     }

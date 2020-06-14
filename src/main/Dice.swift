@@ -27,9 +27,11 @@ final class Dice {
   private var brainFaces: Int
   private var stepsFaces: Int
   private var shotgunFaces: Int
+  private var rolledFace: DiceFace?
 
   init(type: DiceType) {
     self.type = type
+    self.rolledFace = nil
     switch self.type {
       case .green:
         brainFaces = 3
@@ -50,44 +52,48 @@ final class Dice {
     return String(describing: type)
   }
 
-  func roll() -> DiceFace {
+  func getRolledFace() -> DiceFace {
+    return rolledFace!
+  }
+
+  func roll() -> Dice {
     let faceIndex = Int.random(in: 1...6)
     switch type {
       case .green:
         switch faceIndex {
           case 1...3: 
-            return .brain
+            self.rolledFace = .brain
           case 4,5:
-            return .steps
+            self.rolledFace = .steps
           case 6:
-            return .shotgun
+            self.rolledFace = .shotgun
           default:
-            return .brain
+            self.rolledFace = .brain
         }
 
       case .yellow:
         switch faceIndex {
           case 1,2: 
-            return .brain
+            self.rolledFace = .brain
           case 3,4:
-            return .steps
+            self.rolledFace = .steps
           case 5,6:
-            return .shotgun
+            self.rolledFace = .shotgun
           default:
-            return .steps
+            self.rolledFace = .steps
         }
       case .red: 
         switch faceIndex {
           case 1: 
-            return .brain
+            self.rolledFace = .brain
           case 2,3:
-            return .steps
+            self.rolledFace = .steps
           case 4...6:
-            return .shotgun
+            self.rolledFace = .shotgun
           default:
-            return .shotgun
+            self.rolledFace = .shotgun
         }
     }
-
+    return self
   }
 }
