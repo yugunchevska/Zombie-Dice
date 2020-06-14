@@ -13,6 +13,10 @@ final class GameManager {
     }
   }
 
+  func getDicesCount() -> Int {
+    return dices.count
+  }
+
   func chooseThreeDices() -> [Dice] {
     var chosenDices: [Dice] = []
     var chosenIndexes: [Int] = []
@@ -38,9 +42,28 @@ final class GameManager {
   private func random(without: [Int]) -> Int {
     var randomNumber = 99
     repeat {
-      randomNumber = Int.random(in: 0...12)
+      randomNumber = Int.random(in: 0...dices.count - 1)
     } while without.contains(randomNumber)
     
     return randomNumber
+  }
+}
+
+extension GameManager {
+  private func removeDice(remove: Dice) {
+    var indexToRemove = 0
+    for i in 0...dices.count - 1 {
+      if dices[i].getType() == remove.getType() {
+        indexToRemove = i
+        break
+      }
+    }
+    dices.remove(at: indexToRemove)
+  }
+
+  func removeDices(remove: [Dice]) {
+    for dice in remove {
+      removeDice(remove: dice)
+    }
   }
 }

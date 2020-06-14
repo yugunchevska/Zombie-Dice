@@ -13,12 +13,24 @@ for zombie in zombies {
     continue
   }
 
+  if !zombie.hasDices() {
+    print("Zombie " + zombie.getName() + " doesn't have enough dice")
+    zombie.updatePoints(points: points)
+    continue
+  }
+
   let chosenDicesTwo = zombie.chooseThreeDices()
   let rolledDicesTwo = zombie.rollDices(chosenDices: chosenDicesTwo)
   points += zombie.getBrains(diceFaces: rolledDicesTwo)
   deadPoints += zombie.getShotguns(diceFaces: rolledDicesTwo)
   if deadPoints >= 3 {
     print("Zombie " + zombie.getName() + " is dead for this round.")
+    continue
+  }
+
+  if !zombie.hasDices() {
+    print("Zombie " + zombie.getName() + " doesn't have enough dice")
+    zombie.updatePoints(points: points)
     continue
   }
 

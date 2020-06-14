@@ -24,6 +24,7 @@ extension Zombie {
 
     print(name + " chose dice of types " + chosenDices[0].getType() + " " + chosenDices[1].getType() + " " + chosenDices[2].getType())
 
+    gameManager.removeDices(remove: chosenDices)
     return chosenDices
   }
 
@@ -35,6 +36,10 @@ extension Zombie {
     print("After rolling " + name + " has " + rolledDice[0].toString() + " " + rolledDice[1].toString() + " " + rolledDice[2].toString())
 
     return rolledDice
+  }
+
+  func hasDices() -> Bool {
+    return gameManager.getDicesCount() > 2
   }
 
   func getBrains(diceFaces: [DiceFace]) -> Int {
