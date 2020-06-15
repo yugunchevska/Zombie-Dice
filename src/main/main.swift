@@ -28,7 +28,15 @@ func startGame() {
   while true {
     let hasWon = play(zombies: zombies)
     if hasWon {
-      break
+      let playAgain = waitForAnswer(question: "Do you want to play again with the same players?", expectedAnswers: ["Y", "N"])
+      if playAgain == "Y" {
+        for zombie in zombies {
+          zombie.resetPoints()
+        }
+        print()
+      } else {
+        break
+      }
     }
   }
 }
@@ -72,7 +80,7 @@ func play(zombies: [Zombie]) -> Bool {
       if !steps.isEmpty {
 
         for dice in steps {
-          let diceForReturning = waitForAnswer(question: "Do you want to return the " + dice.getType() + " dice?", expectedAnswers: ["Y", "N"])
+          let diceForReturning = waitForAnswer(question: "Do you want to return the " + dice.getTypeAsColor() + " dice?", expectedAnswers: ["Y", "N"])
           if diceForReturning == "Y" {
             zombie.addDices(dices: [dice])
           }
