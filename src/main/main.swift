@@ -45,6 +45,7 @@ func play(zombies: [Zombie]) -> Bool {
   for zombie in zombies { 
     zombie.restoreAllDice()
 
+    print("\n\n\n")
     print("===")
     printTableWithPoints(zombies: zombies) 
     print("Current turn: " + zombie.getName())
@@ -59,7 +60,7 @@ func play(zombies: [Zombie]) -> Bool {
       
       deadPoints += zombie.getShotguns(diceFaces: rolledDices)
       if deadPoints >= 3 {
-        print("Zombie " + zombie.getName() + " is dead for this round.")
+        print("Zombie " + zombie.getName() + " is dead for this round. 💀")
         break
       }
 
