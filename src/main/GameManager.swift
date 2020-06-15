@@ -1,86 +1,164 @@
 final class GameManager {
-  private var dices: [Dice] = []
+  private var zombies: [Zombie] = []
 
   init() {
-    for _ in 0...5 {
-      dices.append(Dice(type: DiceType.green))
-    }
-    for _ in 0...3 {
-      dices.append(Dice(type: DiceType.yellow))
-    }
-    for _ in 0...2 {
-      dices.append(Dice(type: DiceType.red))
-    }
-  }
+    let playersCount = waitForAnswer(question: "Welcome to Zombie Dice (Swift edition). How many players wants to play?", expectedAnswers: ["2", "3", "4", "5", "6", "7", "8"])
 
-  func getDicesCount() -> Int {
-    return dices.count
-  }
+    let zombieCount = Int(playersCount) ?? 2
 
-  func chooseThreeDices() -> [Dice] {
-    var chosenDices: [Dice] = []
-    var chosenIndexes: [Int] = []
+    print("Choose names for your players.")
+    for i in 1...zombieCount {
+      print("Zombie name for player " + String(i) + ": ")
 
-    var index = random(without: chosenIndexes)
-    var dice = dices[index]
-    chosenDices.append(dice)
-    chosenIndexes.append(index)
-
-    index = random(without: chosenIndexes)
-    dice = dices[index]
-    chosenDices.append(dice)
-    chosenIndexes.append(index)
-
-    index = random(without: chosenIndexes)
-    dice = dices[index]
-    chosenDices.append(dice)
-    chosenIndexes.append(index)
-
-    return chosenDices
-  }
-
-  private func random(without: [Int]) -> Int {
-    var randomNumber = 99
-    repeat {
-      randomNumber = Int.random(in: 0...dices.count - 1)
-    } while without.contains(randomNumber)
-    
-    return randomNumber
-  }
-}
-
-extension GameManager {
-  private func removeDice(remove: Dice) {
-    var indexToRemove = 0
-    for i in 0...dices.count - 1 {
-      if dices[i].getType() == remove.getType() {
-        indexToRemove = i
-        break
+      if let name = readLine() {
+        zombies.append(Zombie(name: name))
+      } else {
+        print("Player's name will be Anonymous")
+        zombies.append(Zombie(name: "Anonymous"))
       }
     }
-    dices.remove(at: indexToRemove)
   }
 
-  func removeDices(remove: [Dice]) {
-    for dice in remove {
-      removeDice(remove: dice)
+  func startGame() {
+    if zombies.isEmpty {
+      return
+    }
+
+    while true {
+      let hasWon = play(zombies: zombies)
+      if hasWon {
+        let playAgain = waitForAnswer(question: "Do you want to play again with the same players?", expectedAnswers: ["Y", "N"])
+        if playAgain == "Y" {
+          for zombie in zombies {
+            zombie.resetPoints()
+          }
+          print()
+        } else {
+          break
+        }
+      }
     }
   }
 
-  func addDices(add: [Dice]) {
-    dices.append(contentsOf: add)
+  func play(zombies: [Zombie]) -> Bool {
+    for zombie in zombies { 
+      zombie.restoreAllDice()
+
+      print("\n\n\n")
+      print("===")
+      printTableWithPoints(zombies: zombies) 
+      print("Current turn: " + zombie.getName())
+
+      var points = 0
+      var deadPoints = 0
+      repeat {
+        print("===")
+        let chosenDices: [Dice] = zombie.chooseThreeDices()
+        let rolledDices: [Dice] = zombie.rollDices(chosenDices: chosenDices)
+        print("===")
+        
+        deadPoints += zombie.getShotguns(diceFaces: rolledDices)
+        if deadPoints >= 3 {
+          print("Zombie " + zombie.getName() + " is dead for this round. 💀")
+          break
+        }
+
+        points += zombie.getBrains(diceFaces: rolledDices)
+
+        if zombie.getPoints() + points >= 13 {
+          print("Zombie " + zombie.getName() + " has won!")
+          return true
+        }
+
+        let wantToContinue = waitForAnswer(question: "Do you want to continue?", expectedAnswers: ["Y", "N"])
+        if wantToContinue == "N" {
+          zombie.updatePoints(points: points)
+          break
+        }
+
+        let steps: [Dice] = zombie.getSteps(diceFaces: rolledDices)
+        if !steps.isEmpty {
+
+          for dice in steps {
+            let diceForReturning = waitForAnswer(question: "Do you want to return the " + dice.getTypeAsColor() + " dice?", expectedAnswers: ["Y", "N"])
+            if diceForReturning == "Y" {
+              zombie.addDices(dices: [dice])
+            }
+          }
+          
+        }
+
+        if !zombie.hasDices() {
+          print("Zombie " + zombie.getName() + " doesn't have enough dice")
+          zombie.updatePoints(points: points)
+          break
+        }
+
+      } while (true)
+    }
+    return false
   }
 
-  func restoreAllDice() {
-    dices = []
-    for _ in 0...5 {
-      dices.append(Dice(type: DiceType.green))
+  func waitForAnswer(question: String, expectedAnswers: [String]) -> String {
+    var expAnswers: String = "["
+    for i in 0...expectedAnswers.count - 1 {
+      if i == expectedAnswers.count - 1{
+        expAnswers += expectedAnswers[i] + "]"
+      } else {
+        expAnswers += expectedAnswers[i] + "/"
+      }
     }
-    for _ in 0...3 {
-      dices.append(Dice(type: DiceType.yellow))
+    print(question + expAnswers)
+
+    while (true) {
+      if let answerFromClient = readLine() {
+        for expectedAnswer in expectedAnswers {
+          if answerFromClient.uppercased() == expectedAnswer.uppercased() {
+            return expectedAnswer
+          }
+        }
+        print("Please answer the question")
+      } else {
+        print("Please answer the question")
+      }
     }
-    for _ in 0...2 {
-      dices.append(Dice(type: DiceType.red))
+  }
+
+  func printTableWithPoints(zombies: [Zombie]) {
+    var longestNameCount = 4
+    for zombie in zombies {
+      if zombie.getName().count > longestNameCount {
+        longestNameCount = zombie.getName().count
+      }
+    }
+
+    var horizontalLines = " "
+    for _ in 0...longestNameCount + 4 + 6 {
+      horizontalLines += "-"
+    }
+    print(horizontalLines)
+
+    var header = "| Name"
+    for _ in 0...longestNameCount - 4 {
+      header += " "
+    }
+    header += "| Points |"
+    print(header)
+    print(horizontalLines)
+
+    for zombie in zombies {
+      var zombieRow = "| " + zombie.getName()
+      for _ in 0...longestNameCount - zombie.getName().count {
+        zombieRow += " "
+      }
+      if String(zombie.getPoints()).count == 1 {
+        zombieRow += "| " + String(zombie.getPoints()) + "      |"
+      } else {
+        zombieRow += "| " + String(zombie.getPoints()) + "     |"
+      }
+      
+      print(zombieRow)
+      print(horizontalLines)
     }
   }
 }

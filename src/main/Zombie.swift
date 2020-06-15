@@ -1,12 +1,12 @@
 final class Zombie {
   private var name: String
   private var points: Int
-  private var gameManager: GameManager
+  private var diceManager: DiceManager
 
   init(name: String) {
     self.name = name
     self.points = 0
-    self.gameManager = GameManager()
+    self.diceManager = DiceManager()
   }
 
   func getName() -> String {
@@ -29,11 +29,11 @@ final class Zombie {
 
 extension Zombie {
   func chooseThreeDices() -> [Dice] {
-    let chosenDices = gameManager.chooseThreeDices()
+    let chosenDices = diceManager.chooseThreeDices()
 
     print(name + " chose dice of types " + chosenDices[0].getTypeAsColor() + ", " + chosenDices[1].getTypeAsColor() + ", " + chosenDices[2].getTypeAsColor())
 
-    gameManager.removeDices(remove: chosenDices)
+    diceManager.removeDices(remove: chosenDices)
     return chosenDices
   }
 
@@ -48,15 +48,15 @@ extension Zombie {
   }
 
   func hasDices() -> Bool {
-    return gameManager.getDicesCount() > 2
+    return diceManager.getDicesCount() > 2
   }
 
   func addDices(dices: [Dice]) {
-    gameManager.addDices(add: dices)
+    diceManager.addDices(add: dices)
   }
 
   func restoreAllDice() {
-    gameManager.restoreAllDice()
+    diceManager.restoreAllDice()
   }
 }
 
