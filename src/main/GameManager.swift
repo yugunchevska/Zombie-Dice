@@ -47,7 +47,7 @@ final class GameManager {
       print("\n\n\n")
       print("===")
       printTableWithPoints(zombies: zombies) 
-      print("Current turn: " + zombie.getName())
+      print("Current turn: " + zombie.getName() + " 🧟")
 
       var points = 0
       var deadPoints = 0
@@ -66,7 +66,7 @@ final class GameManager {
         points += zombie.getBrains(diceFaces: rolledDices)
 
         if zombie.getPoints() + points >= 13 {
-          print("Zombie " + zombie.getName() + " has won!")
+          print("Zombie " + zombie.getName() + " has won! 🏆 🏆 🏆")
           return true
         }
 
