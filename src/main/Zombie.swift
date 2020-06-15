@@ -21,13 +21,17 @@ final class Zombie {
     print("Zombie " + name + " won " + String(points) + " brains in this round.")
     self.points += points
   }
+
+  func resetPoints() {
+    self.points = 0
+  }
 }
 
 extension Zombie {
   func chooseThreeDices() -> [Dice] {
     let chosenDices = gameManager.chooseThreeDices()
 
-    print(name + " chose dice of types " + chosenDices[0].getType() + " " + chosenDices[1].getType() + " " + chosenDices[2].getType())
+    print(name + " chose dice of types " + chosenDices[0].getTypeAsColor() + ", " + chosenDices[1].getTypeAsColor() + ", " + chosenDices[2].getTypeAsColor())
 
     gameManager.removeDices(remove: chosenDices)
     return chosenDices
@@ -38,7 +42,7 @@ extension Zombie {
     for dice in chosenDices {
       rolledDice.append(dice.roll())
     }
-    print("After rolling " + name + " has " + rolledDice[0].getRolledFace().toString() + " " + rolledDice[1].getRolledFace().toString() + " " + rolledDice[2].getRolledFace().toString())
+    print("After rolling " + name + " has " + rolledDice[0].getRolledFace().getFaceAsEmoji() + "  " + rolledDice[1].getRolledFace().getFaceAsEmoji() + "  " + rolledDice[2].getRolledFace().getFaceAsEmoji())
 
     return rolledDice
   }

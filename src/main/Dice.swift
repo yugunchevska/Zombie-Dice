@@ -13,6 +13,14 @@ enum DiceFace {
     return String(describing: self)
   }
 
+  func getFaceAsEmoji() -> String {
+    switch self {
+      case .brain: return "🧠"
+      case .steps: return "👣"
+      case .shotgun: return "💥"
+    }
+  }
+
   func getPoint() -> Int {
     switch self {
       case .brain: return 1
@@ -50,6 +58,18 @@ final class Dice {
 
   func getType() -> String {
     return String(describing: type)
+  }
+
+  func getTypeAsColor() -> String {
+    switch type {
+      case .green: 
+        return "\u{001B}[0;32m" + getType().uppercased() + "\u{001B}[0;0m"
+      case .yellow:
+        return "\u{001B}[0;33m" + getType().uppercased() + "\u{001B}[0;0m"
+      case .red: 
+        return "\u{001B}[0;31m" + getType().uppercased() + "\u{001B}[0;0m"
+    }
+
   }
 
   func getRolledFace() -> DiceFace {
